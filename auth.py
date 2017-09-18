@@ -5,17 +5,16 @@ from oauth2client.client import flow_from_clientsecrets
 from oauth2client.file import Storage
 from oauth2client.tools import run_flow
 
-secrets_file = 'client_secrets.json'
 storage_file = 'oauth.json'
 scope = 'https://www.googleapis.com/auth/youtube'
-secrets_file_missing_message = 'client_secrets.json file is missing'
+secrets_file_missing_message = ' file is missing'
 
 
-def get_authenticated_service():
+def get_authenticated_service(secrets_file):
     flow = flow_from_clientsecrets(
         secrets_file,
         scope = scope,
-        message = secrets_file_missing_message
+        message = secrets_file + secrets_file_missing_message
     )
     storage = Storage(storage_file)
     credentials = storage.get()
