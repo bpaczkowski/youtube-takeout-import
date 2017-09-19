@@ -1,4 +1,5 @@
 from googleapiclient.discovery import HttpError
+
 from helpers import get, safe_json_parse, has, read_json_file, write_json_file
 
 
@@ -13,21 +14,20 @@ def import_subscriptions(service, channels: list, import_state_filename: str = '
 
         return
 
+    print('Subscribing to {} channels.'.format(len(channels)))
+
     for index, channel in enumerate(channels):
         print('#{} '.format(index), end = '')
 
         channel_id = get(channel, 'snippet.resourceId.channelId')
         channel_name = get(channel, 'snippet.title')
 
-        if not channel_id or not channel_name:
-            print('wrong channel format')
-
-            if channel_id:
-                import_state.append(channel_id)
+        if not channel_id:
+            print('wrong channel format.')
 
             continue
 
-        print('ID: {}, name: {}'.format(channel_id, channel_name))
+        print('ID: {}, name: "{}"'.format(channel_id, channel_name), end = '')
 
         try:
             service.subscriptions().insert(
@@ -42,7 +42,11 @@ def import_subscriptions(service, channels: list, import_state_filename: str = '
             ).execute()
 
             import_state.append(channel_id)
+
+            print(' subscribed.')
         except HttpError as e:
+            print('.')
+
             if get(e, 'resp.status') != '400' or not e.content:
                 print(e)
 

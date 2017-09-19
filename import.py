@@ -3,6 +3,7 @@ import json
 
 from auth import get_authenticated_service
 from subscriptions import import_subscriptions
+from liked import like_videos
 
 
 def wrong_operation_type(*arg):
@@ -16,7 +17,8 @@ allowed_operations = {
     'LIKED': 'liked'
 }
 operation_map = {
-    allowed_operations['SUBSCRIPTIONS']: import_subscriptions
+    allowed_operations['SUBSCRIPTIONS']: import_subscriptions,
+    allowed_operations['LIKED']: like_videos
 }
 
 parser = argparse.ArgumentParser(
@@ -66,4 +68,4 @@ print('Importing {}.'.format(args.type))
 
 operation(get_authenticated_service(args.client_secrets), parsedTakeout)
 
-print('Import completed.')
+print('Import complete.')
