@@ -10,7 +10,7 @@ scope = 'https://www.googleapis.com/auth/youtube'
 secrets_file_missing_message = ' file is missing'
 
 
-def get_authenticated_service(secrets_file):
+def get_authenticated_service(secrets_file: str):
     flow = flow_from_clientsecrets(
         secrets_file,
         scope = scope,
@@ -19,7 +19,7 @@ def get_authenticated_service(secrets_file):
     storage = Storage(storage_file)
     credentials = storage.get()
 
-    if credentials is None or credentials.invalid:
+    if not credentials or credentials.invalid:
         credentials = run_flow(flow, storage)
 
     return build("youtube", "v3", http = credentials.authorize(httplib2.Http()))

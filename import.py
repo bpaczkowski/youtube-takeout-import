@@ -62,6 +62,8 @@ if not isinstance(parsedTakeout, list):
 
 operation = operation_map.get(args.type, wrong_operation_type)
 
+print('Importing {}.'.format(args.type))
+
 operation(get_authenticated_service(args.client_secrets), parsedTakeout)
 
 print('Import completed.')
