@@ -77,4 +77,5 @@ def import_subscriptions(service, channels: list, import_state_filename: str = '
             break
 
     if len(import_state) > 0:
-        write_json_file(import_state_filename, import_state)
+        if not write_json_file(import_state_filename, import_state):
+            print('Something went wrong when trying to save state file.')
