@@ -29,6 +29,9 @@ def base_get(obj: Union[dict, list, object], prop: str, default: any = None) -> 
 
 
 def get(obj: Union[object, dict], path: Union[str, List[str]], default: any = None) -> any:
+    if not obj:
+        return None
+
     if not isinstance(path, list):
         path = parse_path(path)
 

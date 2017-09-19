@@ -4,6 +4,7 @@ import json
 from auth import get_authenticated_service
 from subscriptions import import_subscriptions
 from liked import like_videos
+from playlist import create_playlist, add_videos_to_playlist
 
 
 def wrong_operation_type(*arg):
@@ -11,14 +12,24 @@ def wrong_operation_type(*arg):
     quit(-1)
 
 
+def import_playlist(service, videos, playlist):
+    playlist_id = create_playlist(service, playlist)
+
+    if not playlist_id:
+        return
+
+    add_videos_to_playlist(service, playlist_id, videos)
+
+
 allowed_operations = {
     'SUBSCRIPTIONS': 'subscriptions',
-    'PLAYLIST': 'playlist',
-    'LIKED': 'liked'
+    'LIKED': 'liked',
+    'PLAYLIST': 'playlist'
 }
 operation_map = {
-    allowed_operations['SUBSCRIPTIONS']: import_subscriptions,
-    allowed_operations['LIKED']: like_videos
+    allowed_operations['SUBSCRIPTIONS']: lambda service, channels, *arg: import_subscriptions(service, channels),
+    allowed_operations['LIKED']: lambda service, videos, *arg: like_videos(service, videos),
+    allowed_operations['PLAYLIST']: import_playlist
 }
 
 parser = argparse.ArgumentParser(
@@ -66,6 +77,6 @@ operation = operation_map.get(args.type, wrong_operation_type)
 
 print('Importing {}.'.format(args.type))
 
-operation(get_authenticated_service(args.client_secrets), parsed_takeout)
+operation(get_authenticated_service(args.client_secrets), parsed_takeout, args.playlist)
 
 print('Import complete.')

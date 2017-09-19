@@ -5,7 +5,7 @@ from helpers import get
 
 def like_videos(service, videos: list):
     if len(videos) == 0:
-        print('No videos left to like.')
+        print('No videos to like.')
 
         return
 
