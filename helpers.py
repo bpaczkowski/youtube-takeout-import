@@ -20,21 +20,18 @@ def get(obj: Union[object, dict], path: Union[str, List[str]], default: any = No
     prop = path.pop(0)
 
     if isinstance(obj, dict):
-        obj = obj.get(prop)
+        obj = obj.get(prop, default)
     elif isinstance(obj, list):
         if not prop.isdigit():
-            return default
+            obj = default
 
         prop = int(prop)
 
-        if len(obj) <= prop:
-            return default
-
-        obj = obj[prop]
+        obj = obj[prop] if len(obj) > prop else default
     elif isinstance(obj, object):
         obj = getattr(obj, prop, None)
     else:
-        return default
+        obj = default
 
     if obj and len(path) > 0:
         return get(obj, path, default)

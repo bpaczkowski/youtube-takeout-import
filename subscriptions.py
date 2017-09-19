@@ -43,7 +43,7 @@ def import_subscriptions(service, channels: list, import_state_filename: str = '
 
             import_state.append(channel_id)
         except HttpError as e:
-            if not has(e, 'resp.status') or e.resp.status != 400 or not e.content:
+            if get(e, 'resp.status') != '400' or not e.content:
                 print(e)
 
                 import_state.append(channel_id)
