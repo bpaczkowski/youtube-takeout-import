@@ -10,6 +10,24 @@ def parse_path(path: str) -> List[str]:
     return path
 
 
+def base_get(obj: Union[dict, list, object], prop: str, default: any = None) -> any:
+    if isinstance(obj, dict):
+        return obj.get(prop, default)
+
+    if isinstance(obj, list):
+        if not prop.isdigit():
+            return default
+
+        prop = int(prop)
+
+        return obj[prop] if len(obj) > prop else default
+
+    if isinstance(obj, object):
+        return getattr(obj, prop, default)
+
+    return default
+
+
 def get(obj: Union[object, dict], path: Union[str, List[str]], default: any = None) -> any:
     if not isinstance(path, list):
         path = parse_path(path)
@@ -17,26 +35,13 @@ def get(obj: Union[object, dict], path: Union[str, List[str]], default: any = No
     if len(path) == 0:
         return obj if obj else default
 
-    prop = path.pop(0)
+    for prop in path:
+        obj = base_get(obj, prop, default)
 
-    if isinstance(obj, dict):
-        obj = obj.get(prop, default)
-    elif isinstance(obj, list):
-        if not prop.isdigit():
-            obj = default
+        if not obj:
+            break
 
-        prop = int(prop)
-
-        obj = obj[prop] if len(obj) > prop else default
-    elif isinstance(obj, object):
-        obj = getattr(obj, prop, None)
-    else:
-        obj = default
-
-    if obj and len(path) > 0:
-        return get(obj, path, default)
-
-    return obj if obj else default
+    return obj
 
 
 def has(obj: Union[object, dict], path: Union[str, List[str]]) -> bool:
