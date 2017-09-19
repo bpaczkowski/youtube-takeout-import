@@ -56,9 +56,9 @@ parser.add_argument(
 )
 
 args = parser.parse_args()
-parsedTakeout = json.load(args.file)
+parsed_takeout = json.load(args.file)
 
-if not isinstance(parsedTakeout, list):
+if not isinstance(parsed_takeout, list):
     print('The Takeout file must contain an array of data.')
     quit(-1)
 
@@ -66,6 +66,6 @@ operation = operation_map.get(args.type, wrong_operation_type)
 
 print('Importing {}.'.format(args.type))
 
-operation(get_authenticated_service(args.client_secrets), parsedTakeout)
+operation(get_authenticated_service(args.client_secrets), parsed_takeout)
 
 print('Import complete.')
