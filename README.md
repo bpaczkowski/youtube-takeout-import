@@ -43,3 +43,5 @@ optional arguments:
                         When import type is a playlist, this indicates the
                         name of the playlist to create. (default: Playlist)
 ```
+
+Note: when importing subscriptions, there is a limit of 75 subscription imports per 4 hours. The script will indicate when the limit is reached, and it will save the progress and exit. To continue, run the script with the same arguments.
