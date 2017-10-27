@@ -41,7 +41,7 @@ parser.add_argument(
     '-c', '--client-secrets',
     type = str,
     default = 'client_secrets.json',
-    help = 'The client secrets filed used for authorizing access to your YouTube account.'
+    help = 'The client secrets file used for authorizing access to your YouTube account.'
 )
 
 parser.add_argument(
