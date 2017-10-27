@@ -60,14 +60,15 @@ parser.add_argument(
 
 parser.add_argument(
     'file',
-    type = argparse.FileType('r'),
+    type = str,
     nargs = '?',
     default = 'takeout.json',
     help = 'The takeout file in JSON format to import.'
 )
 
 args = parser.parse_args()
-parsed_takeout = json.load(args.file)
+with open(args.file, encoding = 'utf-8', mode = 'r') as takeout_file:
+    parsed_takeout = json.load(takeout_file)
 
 if not isinstance(parsed_takeout, list):
     print('The Takeout file must contain an array of data.')
